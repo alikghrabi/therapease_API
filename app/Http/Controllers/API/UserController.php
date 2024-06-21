@@ -22,7 +22,13 @@ class UserController extends Controller
             return response()->json([
                 'status'=>true,
                 'message'=>"User Authenticated Successfully",
-                'token'=>$access_token
+                'token'=>$access_token,
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone
+                ]
             ]);
         } else {
             return response()->json([
