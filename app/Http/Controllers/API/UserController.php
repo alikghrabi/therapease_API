@@ -38,7 +38,7 @@ class UserController extends Controller
         }
     }
 
-    public function register(Request $request)
+    public function register(Request $request) // Done
     {
         $user = new User();
         $user->name = $request->get('name');
@@ -56,7 +56,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show($id) // Done
     {
         // Find the user by ID
         $user = User::find($id);
@@ -70,46 +70,31 @@ class UserController extends Controller
         }
     }
 
-    public function changeAccountInfo($id, $phone = null, $name = null)
+    public function changeAccountInfo(Request $request, $id) // Done
     {
-        // Define validation rules
-        $rules = [
-            'phone' => 'sometimes|string|max:15', // Assuming phone is stored as a string
-            'name' => 'sometimes|string|max:255',
-        ];
-
-        // Create data array for validation
-        $data = [
-            'phone' => $phone,
-            'name' => $name,
-        ];
-
-        // Validate the request data
-        $validator = Validator::make($data, $rules);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'name' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:15',
+        ]);
 
         // Find the user by ID
-        $user = User::find($id);
-
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
+        $user = User::findOrFail($id);
 
         // Update user information
-        if (!is_null($name)) {
-            $user->name = $name;
+        if ($request->has('name')) {
+            $user->name = $validatedData['name'];
+        }
+        if ($request->has('phone')) {
+            $user->phone = $validatedData['phone'];
         }
 
-        if (!is_null($phone)) {
-            $user->phone = $phone;
-        }
-
+        // Save the updated user
         $user->save();
 
-        // Return a success response
-        return response()->json(['message' => 'Account information updated successfully', 'user' => $user]);
+        return response()->json([
+            'status' => true,
+            'message' => 'Account Information updated successfully',
+        ], 200);
     }
 }
