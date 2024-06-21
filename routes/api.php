@@ -19,7 +19,7 @@ use App\Http\Controllers\API\VitalController;
 
 Route::post('/login',[UserController::class,'login']);
 Route::post('/register',[UserController::class,'register']);
-
+Route::get('/user/{id}', [UserController::class, 'show']);
 
 
 Route::group(['middleware'=>['auth:sanctum']],function(){

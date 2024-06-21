@@ -51,4 +51,18 @@ class UserController extends Controller
             'token'=>$access_token
         ]);
     }
+
+    public function show($id)
+    {
+        // Find the user by ID
+        $user = User::find($id);
+
+        if ($user) {
+            // Return the user data as a JSON response
+            return response()->json($user);
+        } else {
+            // Return a 404 not found response if the user does not exist
+            return response()->json(['error' => 'User not found'], 404);
+        }
+    }
 }
