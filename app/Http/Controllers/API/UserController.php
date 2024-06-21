@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -23,16 +24,13 @@ class UserController extends Controller
                 'message'=>"User Authenticated Successfully",
                 'token'=>$access_token
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status'=>false,
                 'message'=>"Invalid Username or Password"
             ]);
         }
-
-
     }
-
 
     public function register(Request $request)
     {
@@ -64,5 +62,48 @@ class UserController extends Controller
             // Return a 404 not found response if the user does not exist
             return response()->json(['error' => 'User not found'], 404);
         }
+    }
+
+    public function changeAccountInfo($id, $phone = null, $name = null)
+    {
+        // Define validation rules
+        $rules = [
+            'phone' => 'sometimes|string|max:15', // Assuming phone is stored as a string
+            'name' => 'sometimes|string|max:255',
+        ];
+
+        // Create data array for validation
+        $data = [
+            'phone' => $phone,
+            'name' => $name,
+        ];
+
+        // Validate the request data
+        $validator = Validator::make($data, $rules);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        // Find the user by ID
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        // Update user information
+        if (!is_null($name)) {
+            $user->name = $name;
+        }
+
+        if (!is_null($phone)) {
+            $user->phone = $phone;
+        }
+
+        $user->save();
+
+        // Return a success response
+        return response()->json(['message' => 'Account information updated successfully', 'user' => $user]);
     }
 }
