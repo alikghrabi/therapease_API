@@ -4,9 +4,11 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash; // Ensure this line is included
+use Illuminate\Support\Facades\Auth;
+
+
 
 class UserController extends Controller
 {
@@ -97,4 +99,54 @@ class UserController extends Controller
             'message' => 'Account Information updated successfully',
         ], 200);
     }
+
+    public function changePassword(Request $request, $id) // Done
+    {
+        // Validate incoming request
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:6|different:current_password',
+            'retype_password' => 'required|same:new_password',
+        ]);
+
+        // Get authenticated user
+        $authenticatedUser = Auth::user();
+
+        // Check if authenticated user is the same as the user whose password is being changed
+        if ($authenticatedUser->id != $id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized. You can only change your own password.'
+            ], 403);
+        }
+
+        // Find user by ID
+        $user = User::find($id);
+
+        // Check if user exists
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        // Check if current password matches
+        if (!Hash::check($request->input('current_password'), $user->password)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Current password is incorrect'
+            ], 401);
+        }
+
+        // Change password
+        $user->password = Hash::make($request->input('new_password'));
+        $user->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Password changed successfully'
+        ]);
+    }
+    
 }

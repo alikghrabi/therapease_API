@@ -1,8 +1,7 @@
 <?php
-
+use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\PatientController;
 use App\Http\Controllers\API\VitalController;
 
@@ -26,5 +25,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('/patients/{id}/appointments',[PatientController::class,'appointments']);
     Route::resource('patients',PatientController::class);
     Route::resource('appointments',AppointmentController::class);
+    Route::post('changePassword/{id}', [UserController::class, 'changePassword']);
+
 });
 
