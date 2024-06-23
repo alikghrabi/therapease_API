@@ -98,6 +98,19 @@ class TherapistController extends Controller
             ], 500);
         }
     }
+
+    public function getAllTherapists()
+    {
+        // Retrieve all therapists from the database
+        $therapists = Therapist::all();
+
+        // Return the list of therapists in JSON format
+        return response()->json([
+            'status' => true,
+            'message' => 'Therapists retrieved successfully',
+            'therapists' => $therapists
+        ]);
+    }
     
 }
 

@@ -21,6 +21,8 @@ use App\Http\Controllers\API\VitalController;
 
 Route::post('/login',[UserController::class,'login']);
 Route::post('/register',[UserController::class,'register']);
+Route::get('/therapists', [TherapistController::class, 'getAllTherapists']);
+
 
 
 Route::post('/loginTherapist', [TherapistController::class, 'login']);
