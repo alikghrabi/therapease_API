@@ -1,9 +1,11 @@
 <?php
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\API\TherapistController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\PatientController;
 use App\Http\Controllers\API\VitalController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,16 +18,23 @@ use App\Http\Controllers\API\VitalController;
 |
 */
 
+
 Route::post('/login',[UserController::class,'login']);
 Route::post('/register',[UserController::class,'register']);
+
+
+Route::post('/loginTherapist', [TherapistController::class, 'login']);
+Route::post('/registerTherapist',[TherapistController::class,'register']);
+
 Route::get('/user/{id}', [UserController::class, 'show']);
-Route::put('/changeAccountInfo/{id}', [UserController::class, 'changeAccountInfo']);
 
 Route::group(['middleware'=>['auth:sanctum']],function(){
-    Route::get('/patients/{id}/appointments',[PatientController::class,'appointments']);
-    Route::resource('patients',PatientController::class);
-    Route::resource('appointments',AppointmentController::class);
-    Route::post('changePassword/{id}', [UserController::class, 'changePassword']);
+    // Route::get('/patients/{id}/appointments',[PatientController::class,'appointments']);
+    // Route::resource('patients',PatientController::class);
+    // Route::resource('appointments',AppointmentController::class);
+    Route::post('changePassword/{id}', [UserController::class, 'change Password']);
+    Route::put('/changeAccountInfo/{id}', [UserController::class, 'changeAccountInfo']);
+
 
 });
 

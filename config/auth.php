@@ -65,6 +65,13 @@ return [
             'model' => App\Models\User::class,
         ],
 
+    'providers' => [
+    'therapists' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Therapist::class,
+    ],
+],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -98,6 +105,8 @@ return [
             'throttle' => 60,
         ],
     ],
+
+    
 
     /*
     |--------------------------------------------------------------------------

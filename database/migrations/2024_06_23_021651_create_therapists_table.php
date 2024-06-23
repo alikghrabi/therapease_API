@@ -25,6 +25,8 @@ class CreateTherapistsTable extends Migration
             $table->integer('experience')->nullable();
             $table->text('description_profile')->nullable();
             $table->text('description_registration')->nullable();
+            $table->string('id_front_pic');
+            $table->string('id_back_pic');
             $table->timestamps();
         });
     }

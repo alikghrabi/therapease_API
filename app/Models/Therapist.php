@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Therapist extends Model
+class Therapist extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
 
@@ -27,6 +28,8 @@ class Therapist extends Model
         'experience',
         'description_profile',
         'description_registration',
+        'id_front_pic',
+        'id_back_pic',
     ];
 
     /**
