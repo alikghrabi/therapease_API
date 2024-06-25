@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash; // Ensure this line is included
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -50,7 +50,7 @@ class UserController extends Controller
         $user->save();
 
         $access_token = $user->createToken('authToken')->plainTextToken;
-
+        $user->sendEmailVerificationNotification();
         return response()->json([
             'status'=>true,
             'message'=>"User Registered Successfully",

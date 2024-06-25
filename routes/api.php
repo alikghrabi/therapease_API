@@ -17,6 +17,7 @@ use App\Http\Controllers\API\VitalController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::post('email/verify/{id}/{hash}', 'App\Http\Controllers\API\VerificationController@verify')->name('verification.verify');
 
 
 Route::post('/login',[UserController::class,'login']);
@@ -36,7 +37,5 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     // Route::resource('appointments',AppointmentController::class);
     Route::post('changePassword/{id}', [UserController::class, 'change Password']);
     Route::put('/changeAccountInfo/{id}', [UserController::class, 'changeAccountInfo']);
-
-
 });
 

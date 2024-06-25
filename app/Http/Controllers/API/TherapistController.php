@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Therapist;
-use Illuminate\Support\Facades\Hash; // Ensure this line is included
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -82,7 +82,8 @@ class TherapistController extends Controller
     
             // Generate token for the therapist
             $token = $therapist->createToken('TherapistToken')->plainTextToken;
-    
+            $user->sendEmailVerificationNotification();
+            
             // Return success response with therapist data and token
             return response()->json([
                 'status' => true,
