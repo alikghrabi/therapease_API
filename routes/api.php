@@ -2,6 +2,8 @@
 use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\TherapistController;
+use App\Http\Controllers\API\AppointmentController;
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\PatientController;
 use App\Http\Controllers\API\VitalController;
