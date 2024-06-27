@@ -53,62 +53,52 @@ class TherapistController extends Controller
     }
     
 
-public function register(Request $request)
-{
-    try {
-        // Validate incoming request
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:therapists,email',
-            'phone' => 'required|string|unique:therapists,phone',
-            'password' => 'required|string|min:6',
-            'verificationCode' => 'nullable|string',
-            'cvFilePath' => 'required|string',
-            'experience' => 'required|integer',
-            'descriptionProfile' => 'nullable|string',
-            'descriptionRegistration' => 'nullable|string',
-            'id_front_pic' => 'required|string',
-            'id_back_pic' => 'required|string',
-        ]);
-
-        // Create a new therapist instance
-        $therapist = new Therapist();
-        $therapist->name = $request->input('name');
-        $therapist->email = $request->input('email');
-        $therapist->phone = $request->input('phone');
-        $therapist->password = Hash::make($request->input('password'));
-        $therapist->verification_code = $request->input('verificationCode');
-        $therapist->cv_file_path = $request->input('cvFilePath');
-        $therapist->experience = $request->input('experience');
-        $therapist->description_profile = $request->input('descriptionProfile');
-        $therapist->description_registration = $request->input('descriptionRegistration');
-        $therapist->id_front_pic = $request->input('id_front_pic');
-        $therapist->id_back_pic = $request->input('id_back_pic');
-        $therapist->application_status = 'pending'; // Set default application status
-        $therapist->save();
-
-        // Generate token for the therapist
-        $token = $therapist->createToken('TherapistToken')->plainTextToken;
-
-        // Send email verification notification
-        $therapist->sendEmailVerificationNotification();
-
-        // Return success response with therapist data and token
-        return response()->json([
-            'status' => true,
-            'message' => 'Therapist registered successfully',
-            'therapist' => $therapist->toArray(),
-            'token' => $token,
-        ], 201);
-    } catch (\Exception $e) {
-        // Handle any exceptions
-        return response()->json([
-            'status' => false,
-            'message' => 'Failed to register therapist. ' . $e->getMessage(),
-        ], 500);
+    public function register(Request $request)
+    {
+        try {
+            // Validate incoming request
+            $validatedData = $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|email|unique:therapists,email',
+                'phone' => 'required|string|unique:therapists,phone',
+                'password' => 'required|string|min:6',
+                'verificationCode' => 'nullable|string',
+                'cvFilePath' => 'required|string',
+                'experience' => 'required|integer',
+                'descriptionProfile' => 'nullable|string',
+                'descriptionRegistration' => 'nullable|string',
+                'id_front_pic' => 'required|string',
+                'id_back_pic' => 'required|string',
+            ]);
+    
+            // Automatically set application status to "pending"
+            $validatedData['applicationStatus'] = 'pending';
+    
+            // Hash the password
+            $validatedData['password'] = Hash::make($validatedData['password']);
+    
+            // Create a new therapist record
+            $therapist = Therapist::create($validatedData);
+    
+            // Generate token for the therapist
+            $token = $therapist->createToken('TherapistToken')->plainTextToken;
+            $user->sendEmailVerificationNotification();
+            
+            // Return success response with therapist data and token
+            return response()->json([
+                'status' => true,
+                'message' => 'Therapist registered successfully',
+                'therapist' => $therapist->toArray(),
+                'token' => $token,
+            ], 201);
+        } catch (\Exception $e) {
+            // Handle any exceptions
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to register therapist. ' . $e->getMessage(),
+            ], 500);
+        }
     }
-}
-
 
     public function getAllTherapists()
     {
@@ -122,39 +112,6 @@ public function register(Request $request)
             'therapists' => $therapists
         ]);
     }
-
-    public function show($id)
-    {
-        $therapist = Therapist::find($id);
-
-        if (!$therapist) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Therapist not found',
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => true,
-            'therapist' => $therapist
-        ]);
-    }
     
-    public function getTherapistInfoById($id)
-    {
-        $therapist = Therapist::find($id);
-
-        if (!$therapist) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Therapist not found',
-            ], 404);
-        }
-
-        return response()->json([
-            'status' => true,
-            'therapist' => $therapist
-        ]);
-    }
 }
 

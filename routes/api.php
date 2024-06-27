@@ -30,11 +30,7 @@ Route::post('/loginTherapist', [TherapistController::class, 'login']);
 Route::post('/registerTherapist',[TherapistController::class,'register']);
 
 Route::get('/user/{id}', [UserController::class, 'show']);
-Route::middleware('auth:sanctum')->get('/therapist/{id}', [TherapistController::class, 'show']);
-Route::middleware('auth:sanctum')->get('/therapist/Bookings/{id}', [TherapistController::class, 'getBookings']);
-Route::middleware('auth:sanctum')->get('/user/Bookings/{id}', [AppointmentController::class, 'getBookings']);
-Route::middleware('auth:sanctum')->get('/therapist/requests/{id}', [TherapistController::class, 'getRequestedAppointments']);
-Route::middleware('auth:sanctum')->get('/therapistInfoById/{id}', [TherapistController::class, 'getTherapistInfoById']);
+
 Route::group(['middleware'=>['auth:sanctum']],function(){
     // Route::get('/patients/{id}/appointments',[PatientController::class,'appointments']);
     // Route::resource('patients',PatientController::class);
