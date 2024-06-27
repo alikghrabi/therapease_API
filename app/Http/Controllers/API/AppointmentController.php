@@ -68,7 +68,7 @@ class AppointmentController extends Controller
             ]);
         }
     }
-
+    
     /**
      * Update the specified resource in storage.
      */
@@ -125,6 +125,46 @@ class AppointmentController extends Controller
                 'data'=>null,
                 'message'=>'Appointment not found'
             ]);
+        }
+    }
+    
+    public function getBookings(Request $request, $id)
+    {
+        try {
+            // Determine if the logged-in user is a therapist or a user (patient)
+            $user = Auth::user();
+            
+            // Fetch appointments based on user type
+            if ($user instanceof \App\Models\Therapist) {
+                // Fetch appointments for the therapist
+                $appointments = Appointment::where('therapist_id', $user->id)
+                    ->where('status', '!=', 'cancelled') // Optional: filter by status if needed
+                    ->get();
+            } elseif ($user instanceof \App\Models\User) {
+                // Fetch appointments for the user (patient)
+                $appointments = Appointment::where('user_id', $user->id)
+                    ->where('status', '!=', 'cancelled') // Optional: filter by status if needed
+                    ->get();
+            } else {
+                // Handle cases where the user type is not recognized
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Unauthorized access',
+                ], 403);
+            }
+            
+            // Return JSON response with appointments data
+            return response()->json([
+                'status' => true,
+                'message' => 'Appointments retrieved successfully',
+                'appointments' => $appointments,
+            ]);
+        } catch (\Exception $e) {
+            // Handle exceptions
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to retrieve appointments. ' . $e->getMessage(),
+            ], 500);
         }
     }
 }
