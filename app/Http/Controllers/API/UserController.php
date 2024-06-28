@@ -50,7 +50,7 @@ class UserController extends Controller
         $user->save();
 
         $access_token = $user->createToken('authToken')->plainTextToken;
-        $user->sendEmailVerificationNotification();
+        //$user->sendEmailVerificationNotification();
         return response()->json([
             'status'=>true,
             'message'=>"User Registered Successfully",

@@ -20,8 +20,8 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('patient_id');
-            $table->foreign('patient_id')->references('id')->on('patients');
+            $table->unsignedBigInteger('therapist_id');
+            $table->foreign('therapist_id')->references('id')->on('therapists');
             $table->timestamps();
         });
     }

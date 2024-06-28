@@ -41,14 +41,11 @@ Route::middleware('auth:sanctum')->get('/user/ApprovedBookings/{id}', [Appointme
 Route::middleware('auth:sanctum')->get('/therapist/OldBookings/{id}', [AppointmentController::class, 'getOldBookings']);
 Route::middleware('auth:sanctum')->get('/user/OldBookings/{id}', [AppointmentController::class, 'getOldBookings']);
 Route::middleware('auth:sanctum')->post('/AddBooking', [AppointmentController::class, 'addBooking']);
-Route::middleware('auth:sanctum')->delete('/DeleteBooking', [AppointmentController::class, 'DeleteBooking']);
-
+Route::middleware('auth:sanctum')->delete('/DeleteBooking/{id}', [AppointmentController::class, 'DeleteBooking']);
+Route::middleware('auth:sanctum')->put('/UpdateBooking/{id}', [AppointmentController::class, 'updateBooking']);
 
 Route::middleware('auth:sanctum')->get('/therapistInfoById/{id}', [TherapistController::class, 'getTherapistInfoById']);
 Route::group(['middleware'=>['auth:sanctum']],function(){
-    // Route::get('/patients/{id}/appointments',[PatientController::class,'appointments']);
-    // Route::resource('patients',PatientController::class);
-    // Route::resource('appointments',AppointmentController::class);
     Route::post('changePassword/{id}', [UserController::class, 'change Password']);
     Route::put('/changeAccountInfo/{id}', [UserController::class, 'changeAccountInfo']);
 });

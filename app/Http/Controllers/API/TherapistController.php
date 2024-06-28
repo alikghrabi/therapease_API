@@ -91,7 +91,7 @@ public function register(Request $request)
         $token = $therapist->createToken('TherapistToken')->plainTextToken;
 
         // Send email verification notification
-        $therapist->sendEmailVerificationNotification();
+        //$therapist->sendEmailVerificationNotification();
 
         // Return success response with therapist data and token
         return response()->json([
