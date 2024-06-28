@@ -33,9 +33,17 @@ Route::post('/registerTherapist',[TherapistController::class,'register']);
 
 Route::get('/user/{id}', [UserController::class, 'show']);
 Route::middleware('auth:sanctum')->get('/therapist/{id}', [TherapistController::class, 'show']);
-Route::middleware('auth:sanctum')->get('/therapist/Bookings/{id}', [TherapistController::class, 'getBookings']);
-Route::middleware('auth:sanctum')->get('/user/Bookings/{id}', [AppointmentController::class, 'getBookings']);
-Route::middleware('auth:sanctum')->get('/therapist/requests/{id}', [TherapistController::class, 'getRequestedAppointments']);
+
+Route::middleware('auth:sanctum')->get('/therapist/RequestedBookings/{id}', [TherapistController::class, 'getRequestedBookings']);
+Route::middleware('auth:sanctum')->get('/therapist/ApprovedBookings/{id}', [TherapistController::class, 'getApprovedBookings']);
+Route::middleware('auth:sanctum')->get('/user/RequestedBookings/{id}', [AppointmentController::class, 'getRequestedBookings']);
+Route::middleware('auth:sanctum')->get('/user/ApprovedBookings/{id}', [AppointmentController::class, 'getRequestedBookings']);
+Route::middleware('auth:sanctum')->get('/therapist/OldBookings/{id}', [AppointmentController::class, 'getOldBookings']);
+Route::middleware('auth:sanctum')->get('/user/OldBookings/{id}', [AppointmentController::class, 'getOldBookings']);
+Route::middleware('auth:sanctum')->post('/AddBooking', [AppointmentController::class, 'addBooking']);
+Route::middleware('auth:sanctum')->delete('/DeleteBooking', [AppointmentController::class, 'DeleteBooking']);
+
+
 Route::middleware('auth:sanctum')->get('/therapistInfoById/{id}', [TherapistController::class, 'getTherapistInfoById']);
 Route::group(['middleware'=>['auth:sanctum']],function(){
     // Route::get('/patients/{id}/appointments',[PatientController::class,'appointments']);
